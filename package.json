@@ -9,7 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.26",
     "@elastic/elasticsearch": "^9.2.0",
+    "@supabase/supabase-js": "^2.78.0",
+    "ai": "^5.0.86",
     "next": "16.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
