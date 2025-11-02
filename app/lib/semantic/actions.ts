@@ -1,51 +1,40 @@
+"use server";
 import { supabase } from "./pgClient";
-import {
-  generateEmbeddings,
-  flattenCompanyRecord,
-  type CompanyRecord,
-} from "./embed";
+import { generateEmbedding } from "./embed";
 
 /**
- * Seed embeddings for company records.
- * Checks for existing content to avoid duplicates, then generates embeddings and inserts new records.
+ * Semantic search using the RPC function defined in SQL (match_my_table_embeddings)
+ * It returns rows from my_table_embeddings with similarity scores.
  */
-export async function seedEmbeddings(dealerships: CompanyRecord[]) {
-  const contents = dealerships.map(flattenCompanyRecord);
-
-  // ---
-  // Check which contents already exist
-  //   const { data: existing } = await supabase
-  //     .from("my_table_embeddings")
-  //     .select("content")
-  //     .in("content", contents);
-
-  //   const existingContents = new Set((existing ?? []).map((e) => e.content));
-
-  //   // Filter to only new records
-  //   const newRecords = companyRecords.filter(
-  //     (_, i) => !existingContents.has(contents[i])
-  //   );
-
-  //   if (newRecords.length === 0) return;
-
-  //   const newContents = newRecords.map(flattenCompanyRecord);
-  // ---
-
-  // Generate embeddings for new contents
-  const { embeddings, model } = await generateEmbeddings(contents);
-
-  // Prepare insert payload
-  const insertPayload = dealerships.map((content, i) => ({
-    content: JSON.stringify(content),
-    embedding: embeddings[i],
-    model,
-  }));
-
-  // Insert new embeddings
-  const { error } = await supabase
-    .from("my_table_embeddings")
-    .insert(insertPayload);
+export async function semanticSearchByEmbedding(
+  embedding: number[],
+  limit = 20
+) {
+  const { data, error } = await supabase.rpc("match_my_table_embeddings", {
+    query_vector: embedding,
+    limit_result: limit,
+  });
 
   if (error) throw error;
-  else console.log("Success");
+  return data ?? [];
+}
+
+/**
+ * Combined flow: try keyword first, then fall back to semantic when keyword returns nothing.
+ */
+export async function semanticSearch(
+  searchTerm: string,
+  itemsPerTableLimit = 20
+) {
+  const { embedding } = await generateEmbedding(searchTerm);
+  const semanticResults = await semanticSearchByEmbedding(
+    embedding,
+    itemsPerTableLimit
+  );
+
+  const semanticResult = semanticResults.map((r: any) => {
+    return JSON.parse(r.content);
+  });
+
+  return semanticResult;
 }

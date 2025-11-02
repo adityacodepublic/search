@@ -1,12 +1,3 @@
-import { Client } from "@elastic/elasticsearch";
-
-const client = new Client({
-  node: "http://localhost:9200",
-  auth: {
-    apiKey: "ZVhreE9ab0JwdWpsMHctTTBxY1A6bnhEWWxuVl9NSXpKU1dDWEU5dnJFdw==",
-  },
-});
-
 // Search api https://www.elastic.co/docs/reference/query-languages/query-dsl/query-dsl-match-query
 //            https://www.elastic.co/docs/reference/elasticsearch/rest-apis/common-options#fuzziness
 
@@ -14,7 +5,7 @@ const client = new Client({
 
 const index = "dealerships";
 
-export async function searchDealerships(query: string) {
+async function searchDealerships(query: string) {
   const body = {
     query: {
       bool: {

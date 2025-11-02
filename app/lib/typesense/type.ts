@@ -1,7 +1,7 @@
 import { SearchParams } from "typesense/lib/Typesense/Types";
 import { client } from "./client";
 
-import fs from "fs/promises";
+// import fs from "fs/promises";
 
 // COLLECTIONS
 // https://typesense.org/docs/29.0/api/collections.html
