@@ -47,7 +47,7 @@ export default function SearchPage() {
     if (searchTerm.trim().length > 0) {
       (async () => {
         await measureTime(
-          () => semanticSearch(searchTerm, 10),
+          () => semanticSearch(searchTerm, 15),
           (res) => res
         ).then(setSemantic);
         await measureTime(

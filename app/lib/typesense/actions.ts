@@ -12,6 +12,7 @@ export async function typesenseSearch(query: string): Promise<any> {
     min_len_1typo: 2,
     min_len_2typo: 5,
     split_join_tokens: "always", // allows 'newyork' or 'nw york' to still match
+    per_page: 15,
   };
 
   const result = client
@@ -27,6 +28,7 @@ export async function typesenseSemanticSearch(query: string): Promise<any> {
     q: query,
     query_by: "embedding",
     exclude_fields: "embedding",
+    per_page: 15,
   };
 
   const result = client

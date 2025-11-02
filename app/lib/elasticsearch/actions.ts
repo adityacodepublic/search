@@ -1,8 +1,13 @@
 "use server";
 
+// PAGINATION
+// https://www.elastic.co/docs/reference/elasticsearch/rest-apis/paginate-search-results
+
 export async function elasticSearch(query: string): Promise<any> {
   const index = "dealerships";
   const body = {
+    // from: 5,
+    size: 15,
     query: {
       bool: {
         should: [
@@ -31,6 +36,7 @@ export async function elasticSemanticSearch(query: string): Promise<any> {
   const semanticIndex = "dealerships_semantic";
 
   const body = {
+    size: 15,
     query: {
       bool: {
         should: [
@@ -63,6 +69,7 @@ export async function elasticHybridSearch(query: string): Promise<any> {
   const semanticIndex = "dealerships_hybrid";
 
   const body = {
+    size: 15,
     retriever: {
       rrf: {
         retrievers: [
