@@ -55,4 +55,4 @@ export async function combinedSearch(searchTerm: string, itemsPerTableLimit = 20
 }
 
 
-console.log(await combinedSearch("BMW dealership in New Yrk", 10));
+console.log(await combinedSearch("city with the name New Yrk", 10));

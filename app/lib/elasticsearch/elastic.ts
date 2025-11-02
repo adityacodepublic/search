@@ -1,11 +1,14 @@
 import { Client } from "@elastic/elasticsearch";
 
 const client = new Client({
-  node: "http://127.0.0.1:9200",
+  node: "http://localhost:9200",
   auth: {
     apiKey: "ZVhreE9ab0JwdWpsMHctTTBxY1A6bnhEWWxuVl9NSXpKU1dDWEU5dnJFdw==",
   },
 });
+
+// Search api https://www.elastic.co/docs/reference/query-languages/query-dsl/query-dsl-match-query
+//            https://www.elastic.co/docs/reference/elasticsearch/rest-apis/common-options#fuzziness
 
 const index = "dealerships";
 
@@ -23,7 +26,6 @@ export async function searchDealerships(query: string) {
     },
   };
 
-  // Using fetch instead of client due to connection issues
   const url = `http://localhost:9200/${index}/_search`;
   const response = await fetch(url, {
     method: "POST",
@@ -44,6 +46,6 @@ export async function searchDealerships(query: string) {
 }
 
 // Example usage (remove or comment out in production)
-searchDealerships("Nw york")
+searchDealerships("the city whose name is New yrk")
   .then((hits) => console.log(hits))
   .catch(console.error);

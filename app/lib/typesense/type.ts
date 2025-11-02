@@ -1,34 +1,28 @@
-const Typesense = require("typesense");
-// import fs from "fs/promises";
+import { SearchParams } from "typesense/lib/Typesense/Types";
+import { client } from "./client";
 
-let client = new Typesense.Client({
-  nodes: [
-    {
-      host: "localhost",
-      port: 8108,
-      protocol: "http",
-    },
-  ],
-  apiKey: "xyz",
-  connectionTimeoutSeconds: 2,
-});
+import fs from "fs/promises";
 
 // COLLECTIONS
 // https://typesense.org/docs/29.0/api/collections.html
 
+// DELETE COLLECTION
 // client.collections('dealerships').delete();
 
+// CREATE COLLECTION
 // let dealershipSchema = {
 //   name: "dealerships",
 //   fields: [
 //     { name: "name", type: "string" },
 //     { name: "address", type: "string" },
-//     { name: "pin_code", type: "string", facet: true },
+//     { name: "pin_code", type: "string" },
 //     { name: "source", type: "string", facet: true },
-//     // optional: add an ID or ranking field
-//     { name: "id", type: "int32" },
+//     { name: "city", type: "string", facet: true },
+//     { name: "state", type: "string", facet: true },
+//     { name: "country", type: "string", facet: true },
+//     { name: "timezone", type: "string", facet: true },
 //   ],
-// };
+// } as any;
 
 // client
 //   .collections()
@@ -60,8 +54,8 @@ let client = new Typesense.Client({
 //   console.log(collection);
 // });
 
-let searchParameters = {
-  q: "the rocked nw york 10001",
+let searchParameters: SearchParams<object, string> = {
+  q: "the city whose name is nw york",
   query_by: "name,address,pin_code,source",
   query_by_weights: "4,3,2,1", // precedence: name > address > pin_code > source
   num_typos: 2, // allow up to 2 typos
