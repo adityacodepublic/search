@@ -37,7 +37,7 @@ export const ResultCard = ({
           <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white truncate">
             {name ?? "Name not found"}
           </h3>
-          <p className="text-xs sm:text-sm text-neutral-500 dark:text-zinc-400 mt-1 truncate">
+          <p className="text-xs sm:text-sm text-wrap text-neutral-500 dark:text-zinc-400 mt-1 truncate">
             {addressLine || "Address not found"}
           </p>
         </div>
@@ -75,6 +75,11 @@ export const ResultsCardSkeleton = ({
   results,
   time,
 }: ResultsCardSkeletonProps) => {
+  const ids = results
+    .map((r) => Number(r.id))
+    .sort((a, b) => a - b)
+    .join(", ");
+
   return (
     <div className="space-y-3 min-w-lg ">
       {/* Header with title and performance time */}
@@ -93,6 +98,7 @@ export const ResultsCardSkeleton = ({
           </div>
         )}
       </div>
+      <p className="px-2.5 text-sm text-neutral-400">{ids}</p>
 
       {/* Results */}
       {results.map((r, idx) => (

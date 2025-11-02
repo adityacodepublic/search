@@ -93,6 +93,9 @@ export default function SearchPage() {
           setSearchTerm(value);
         }}
       />
+      <p className="-mt-6 mb-7 text-sm text-neutral-500">
+        {searchTerm}
+      </p>
       {semantic.hits.length > 0 && (
         <div className="mt-8 flex space-x-10 w-full overflow-x-auto pb-2 px-10 scroll-px-4 snap-x snap-mandatory">
           <div className="shrink-0 snap-start">

@@ -69,7 +69,6 @@ export async function elasticHybridSearch(query: string): Promise<any> {
   const semanticIndex = "dealerships_hybrid";
 
   const body = {
-    size: 15,
     retriever: {
       rrf: {
         retrievers: [
@@ -103,6 +102,7 @@ export async function elasticHybridSearch(query: string): Promise<any> {
             },
           },
         ],
+        rank_window_size: 15,
       },
     },
   };

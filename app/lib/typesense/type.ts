@@ -58,7 +58,7 @@ let searchParameters: SearchParams<object, string> = {
   q: "the city whose name is nw york",
   query_by: "name,address,pin_code,source",
   query_by_weights: "4,3,2,1", // precedence: name > address > pin_code > source
-  num_typos: 2, // allow up to 2 typos
+  num_typos: 4, 
   min_len_1typo: 2,
   min_len_2typo: 5,
   split_join_tokens: "always", // allows 'newyork' or 'nw york' to still match

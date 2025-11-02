@@ -104,6 +104,7 @@ export async function searchDealerships(query: string) {
             },
           },
         ],
+        rank_window_size: 15,
       },
     },
   };
@@ -120,6 +121,10 @@ export async function searchDealerships(query: string) {
   });
 
   if (!response.ok) {
+    console.log(response);
+    console.log(response.json());
+    
+    
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
