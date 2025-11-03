@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { use, useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export function PlaceholdersAndVanishInput({
@@ -19,7 +19,7 @@ export function PlaceholdersAndVanishInput({
   const startAnimation = () => {
     intervalRef.current = setInterval(() => {
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
-    }, 5000);
+    }, 3000);
   };
   const handleVisibilityChange = () => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
@@ -153,6 +153,11 @@ export function PlaceholdersAndVanishInput({
     if (e.key === "Enter" && !animating) {
       vanishAndSubmit();
     }
+    if (e.key === "Tab") {
+      setValue(placeholders[currentPlaceholder]);
+      // inputRef.current?.focus();
+      e.preventDefault();
+    }
   };
 
   const vanishAndSubmit = () => {
@@ -175,6 +180,13 @@ export function PlaceholdersAndVanishInput({
     vanishAndSubmit();
     onSubmit && onSubmit(currentValue);
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <form
       className={cn(

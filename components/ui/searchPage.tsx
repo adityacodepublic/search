@@ -86,7 +86,7 @@ export default function SearchPage() {
   return (
     <div className="bg-zinc-50 min-h-screen flex flex-col items-center justify-center p-4 overflow-x-hidden">
       <PlaceholdersAndVanishInput
-        placeholders={["the dealr in new yrk", "bmd dlrships", "bmw in txs"]}
+        placeholders={["audi dealr n alska", "all dealr in new yrk", "bmd dlrships", "bmw in txs"]}
         onChange={() => {}}
         onSubmit={(value) => {
           console.log(value);
