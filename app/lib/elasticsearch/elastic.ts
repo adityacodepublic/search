@@ -5,7 +5,7 @@
 
 const index = "dealerships";
 
-async function searchDealerships(query: string) {
+export async function searchDealerships(query: string) {
   const body = {
     query: {
       bool: {

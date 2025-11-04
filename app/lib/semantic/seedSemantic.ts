@@ -1,4 +1,4 @@
-import { seedEmbeddings } from "./actions";
+import { seedEmbeddings } from "./embed";
 import { readFile } from "fs/promises";
 import path from "path";
 

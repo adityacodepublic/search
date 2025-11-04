@@ -13,6 +13,11 @@ import {
   elasticSearch,
   elasticSemanticSearch,
 } from "@/app/lib/elasticsearch/actions";
+import {
+  elasticHybridSearchV2,
+  elasticSearchV2,
+  elasticSemanticSearchV2,
+} from "@/app/lib/elasticsearch/v2/actions";
 
 async function measureTime<T>(
   promise: () => Promise<T>,
@@ -37,11 +42,17 @@ export default function SearchPage() {
   const [elastic, setElastic] = useState({ time: 0, hits: [] });
   const [elasticSemantic, setElasticSemantic] = useState({ time: 0, hits: [] });
   const [elasticHybrid, setElasticHybrid] = useState({ time: 0, hits: [] });
-  const [typesense, setTypesense] = useState({ time: 0, hits: [] });
-  const [semanticTypesense, setSemanticTypesense] = useState({
+  const [elasticV2, setElasticV2] = useState({ time: 0, hits: [] });
+  const [elasticSemanticV2, setElasticSemanticV2] = useState({
     time: 0,
     hits: [],
   });
+  const [elasticHybridV2, setElasticHybridV2] = useState({ time: 0, hits: [] });
+  // const [typesense, setTypesense] = useState({ time: 0, hits: [] });
+  // const [semanticTypesense, setSemanticTypesense] = useState({
+  //   time: 0,
+  //   hits: [],
+  // });
 
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
@@ -63,13 +74,25 @@ export default function SearchPage() {
           (res) => res.hits.hits.map((hit: any) => hit._source)
         ).then(setElasticHybrid);
         await measureTime(
-          () => typesenseSearch(searchTerm),
-          (res) => res.hits.map((hit: any) => hit.document)
-        ).then(setTypesense);
+          () => elasticSearchV2(searchTerm),
+          (res) => res.hits.hits.map((hit: any) => hit._source)
+        ).then(setElasticV2);
         await measureTime(
-          () => typesenseSemanticSearch(searchTerm),
-          (res) => res.hits.map((hit: any) => hit.document)
-        ).then(setSemanticTypesense);
+          () => elasticSemanticSearchV2(searchTerm),
+          (res) => res.hits.hits.map((hit: any) => hit._source)
+        ).then(setElasticSemanticV2);
+        await measureTime(
+          () => elasticHybridSearchV2(searchTerm),
+          (res) => res.hits.hits.map((hit: any) => hit._source)
+        ).then(setElasticHybridV2);
+        // await measureTime(
+        //   () => typesenseSearch(searchTerm),
+        //   (res) => res.hits.map((hit: any) => hit.document)
+        // ).then(setTypesense);
+        // await measureTime(
+        //   () => typesenseSemanticSearch(searchTerm),
+        //   (res) => res.hits.map((hit: any) => hit.document)
+        // ).then(setSemanticTypesense);
       })();
     }
   }, [searchTerm]);
@@ -78,24 +101,27 @@ export default function SearchPage() {
     semantic,
     elastic,
     elasticSemantic,
-    elasticHybrid,
-    typesense,
-    semanticTypesense
+    elasticHybrid
+    // typesense,
+    // semanticTypesense
   );
 
   return (
     <div className="bg-zinc-50 min-h-screen flex flex-col items-center justify-center p-4 overflow-x-hidden">
       <PlaceholdersAndVanishInput
-        placeholders={["audi dealr n alska", "all dealr in new yrk", "bmd dlrships", "bmw in txs"]}
+        placeholders={[
+          "audi dealr n alska",
+          "all dealr in new yrk",
+          "bmd dlrships",
+          "bmw in txs",
+        ]}
         onChange={() => {}}
         onSubmit={(value) => {
           console.log(value);
           setSearchTerm(value);
         }}
       />
-      <p className="-mt-6 mb-7 text-sm text-neutral-500">
-        {searchTerm}
-      </p>
+      <p className="-mt-6 mb-7 text-sm text-neutral-500">{searchTerm}</p>
       {semantic.hits.length > 0 && (
         <div className="mt-8 flex space-x-10 w-full overflow-x-auto pb-2 px-10 scroll-px-4 snap-x snap-mandatory">
           <div className="shrink-0 snap-start">
@@ -114,9 +140,23 @@ export default function SearchPage() {
           </div>
           <div className="shrink-0 snap-start">
             <ResultsCardSkeleton
+              title="Elasticsearch V2 (Full-Text Search)"
+              results={elasticV2.hits}
+              time={elasticV2.time}
+            />
+          </div>
+          <div className="shrink-0 snap-start">
+            <ResultsCardSkeleton
               title="Elasticsearch (Semantic Search)"
               results={elasticSemantic.hits}
               time={elasticSemantic.time}
+            />
+          </div>
+          <div className="shrink-0 snap-start">
+            <ResultsCardSkeleton
+              title="Elasticsearch V2 (Semantic Search)"
+              results={elasticSemanticV2.hits}
+              time={elasticSemanticV2.time}
             />
           </div>
           <div className="shrink-0 snap-start">
@@ -127,6 +167,13 @@ export default function SearchPage() {
             />
           </div>
           <div className="shrink-0 snap-start">
+            <ResultsCardSkeleton
+              title="Elasticsearch V2 (Hybrid Search)"
+              results={elasticHybridV2.hits}
+              time={elasticHybridV2.time}
+            />
+          </div>
+          {/* <div className="shrink-0 snap-start">
             <ResultsCardSkeleton
               title="Typesense (Full-Text Search)"
               results={typesense.hits}
@@ -139,7 +186,7 @@ export default function SearchPage() {
               results={semanticTypesense.hits}
               time={semanticTypesense.time}
             />
-          </div>
+          </div> */}
         </div>
       )}
     </div>
