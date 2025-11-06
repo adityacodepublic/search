@@ -5,7 +5,7 @@
 import path from "path";
 import { readFile } from "fs/promises";
 import { Client } from "@elastic/elasticsearch";
-import { flattenCompanyRecord } from "../../semantic/embed";
+// import { flattenCompanyRecord } from "../../semantic/embed";
 
 const client = new Client({
   node: "http://localhost:9200",
@@ -45,7 +45,7 @@ export async function processFile() {
         timezone,
         source,
       };
-      return { ...base, semantic_content: flattenCompanyRecord(base) };
+      return { ...base };
     }
   );
 
@@ -110,6 +110,7 @@ export async function searchDealerships(query: string) {
           // { match: { semantic_content: { query, fuzziness: "AUTO", boost: 5 } } },
           // { match: { id: { query, fuzziness: "AUTO", boost: 4 } } },
         ],
+        // minimum_should_match: 1,
       },
     },
   };

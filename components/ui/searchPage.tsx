@@ -18,6 +18,7 @@ import {
   elasticSearchV2,
   elasticSemanticSearchV2,
 } from "@/app/lib/elasticsearch/v2/actions";
+import { searchDealerships } from "@/app/lib/elasticsearch/v2/elasticSemantic";
 
 async function measureTime<T>(
   promise: () => Promise<T>,
@@ -78,7 +79,7 @@ export default function SearchPage() {
           (res) => res.hits.hits.map((hit: any) => hit._source)
         ).then(setElasticV2);
         await measureTime(
-          () => elasticSemanticSearchV2(searchTerm),
+          () => searchDealerships(searchTerm),
           (res) => res.hits.hits.map((hit: any) => hit._source)
         ).then(setElasticSemanticV2);
         await measureTime(
