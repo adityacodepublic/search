@@ -140,3 +140,5 @@ searchDealerships("the city whose name is New yrk")
 
 // createIndex();
 // seedData();
+
+// npx ts-node app/lib/elasticsearch/v2/elastic.ts

@@ -1,47 +1,47 @@
 "use server";
-// import path from "path";
-// import { readFile } from "fs/promises";
-// import { Client } from "@elastic/elasticsearch";
+import path from "path";
+import { readFile } from "fs/promises";
+import { Client } from "@elastic/elasticsearch";
 import { generateEmbedding } from "../../semantic/embed";
 
-// const client = new Client({
-//   node: "http://localhost:9200",
-//   auth: {
-//     apiKey: "ZVhreE9ab0JwdWpsMHctTTBxY1A6bnhEWWxuVl9NSXpKU1dDWEU5dnJFdw==",
-//   },
-// });
+const client = new Client({
+  node: "http://localhost:9200",
+  auth: {
+    apiKey: "ZVhreE9ab0JwdWpsMHctTTBxY1A6bnhEWWxuVl9NSXpKU1dDWEU5dnJFdw==",
+  },
+});
 
 const semanticIndex = "dealerships_semantic_v2";
 
-// export async function processFile() {
-//   const filePath = path.join(process.cwd(), "learnings", "embeddings.json");
-//   const data = await readFile(filePath, "utf-8");
-//   const dealerships = JSON.parse(data) as any[];
+export async function processFile() {
+  const filePath = path.join(process.cwd(), "learnings", "embeddings.json");
+  const data = await readFile(filePath, "utf-8");
+  const dealerships = JSON.parse(data) as any[];
 
-//   return dealerships;
-// }
+  return dealerships;
+}
 
-// // create index
-// export async function createSemanticIndex() {
-//   const data = processFile();
-//   client.indices.create({
-//     index: semanticIndex,
-//     settings: {
-//       number_of_shards: 1,
-//       number_of_replicas: 1,
-//     },
-//     mappings: {
-//       dynamic: "false",
-//       properties: {
-//         embedding: {
-//           type: "dense_vector",
-//           dims: 768,
-//           similarity: "cosine",
-//         },
-//       },
-//     },
-//   });
-// }
+// create index
+export async function createSemanticIndex() {
+  const data = processFile();
+  client.indices.create({
+    index: semanticIndex,
+    // settings: {
+    //   number_of_shards: 1,
+    //   number_of_replicas: 1,
+    // },
+    mappings: {
+      dynamic: "false",
+      properties: {
+        embedding: {
+          type: "dense_vector",
+          dims: 768,
+          similarity: "cosine",
+        },
+      },
+    },
+  });
+}
 
 // // seed data
 // async function seedData() {
